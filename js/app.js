@@ -1,4 +1,5 @@
-const loadProducts = () => {
+const loadProducts = () =>
+{
   const url = `https://fakestoreapi.com/products`;
   fetch(url)
     .then((response) => response.json())
@@ -7,42 +8,56 @@ const loadProducts = () => {
 loadProducts();
 
 // show all product in UI 
-const showProducts = (products) => {
-  const allProducts = products.map((pd) => pd);
-  for (const product of allProducts) {
-    const image = product.images;
+const showProducts = (products) =>
+{
+  products.forEach(items =>
+  {
+    const { category, description, id, image, price, rating: { rate, count }, title } = items;
+    console.log(image)
     const div = document.createElement("div");
-    div.classList.add("product");
-    div.innerHTML = `<div class="single-product">
-      <div>
-    <img class="product-image" src=${image}></img>
+    div.classList.add("col");
+    div.innerHTML = `
+    <div id="single-product" class="card shadow p-2">
+      <img src="${image}" id="product-image" class="card-img-top img-thumbnail" alt="...">
+      <div class="card-body text-center">
+        <h5 class="card-title">${title}</h5>
+        <p class="card-text">Category: ${category}</p>
+        <p class="card-text">
+        <small class="text-muted">Ratings : ${rate} out of 5</small>
+        <br>
+        <small class="text-muted">Customer review : ${count}</small>
+        </p>
+        <h2>Price: $ ${price}</h2>
       </div>
-      <h3>${product.title}</h3>
-      <p>Category: ${product.category}</p>
-      <h2>Price: $ ${product.price}</h2>
-      <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success">add to cart</button>
-      <button id="details-btn" class="btn btn-danger">Details</button></div>
-      `;
+      <div class="mx-auto">
+        <button onclick="addToCart(${id},${price})" id="addToCart-btn" class="buy-now btn btn-secondary">add to cart</button>
+        <button id="details-btn" class="btn btn-outline-secondary">Details</button>
+      </div>
+    </div>
+    `;
     document.getElementById("all-products").appendChild(div);
-  }
+  })
 };
 let count = 0;
-const addToCart = (id, price) => {
+const addToCart = (id, price) =>
+{
   count = count + 1;
-  updatePrice("price", price);
+  updatePrice(id, price);
 
   updateTaxAndCharge();
   document.getElementById("total-Products").innerText = count;
 };
 
-const getInputValue = (id) => {
+const getInputValue = (id) =>
+{
   const element = document.getElementById(id).innerText;
-  const converted = parseInt(element);
+  const converted = parseFloat(element);
   return converted;
 };
 
 // main price update function
-const updatePrice = (id, value) => {
+const updatePrice = (id, value) =>
+{
   const convertedOldPrice = getInputValue(id);
   const convertPrice = parseFloat(value);
   const total = convertedOldPrice + convertPrice;
@@ -50,12 +65,16 @@ const updatePrice = (id, value) => {
 };
 
 // set innerText function
-const setInnerText = (id, value) => {
-  document.getElementById(id).innerText = Math.round(value);
+const setInnerText = (id, value) =>
+{
+  let sum = value.toFixed(2);
+  sum = parseFloat(sum);
+  document.getElementById(id).innerText = sum;
 };
 
 // update delivery charge and total Tax
-const updateTaxAndCharge = () => {
+const updateTaxAndCharge = () =>
+{
   const priceConverted = getInputValue("price");
   if (priceConverted > 200) {
     setInnerText("delivery-charge", 30);
@@ -72,7 +91,8 @@ const updateTaxAndCharge = () => {
 };
 
 //grandTotal update function
-const updateTotal = () => {
+const updateTotal = () =>
+{
   const grandTotal =
     getInputValue("price") + getInputValue("delivery-charge") +
     getInputValue("total-tax");
