@@ -1,23 +1,23 @@
-const allProducts = document.getElementById('all-products');
-const singleProduct = document.getElementById('single-display')
+const allProductsField = document.getElementById('all-products');
+const singleProductField = document.getElementById('single-display')
 
 // load all product function
 const loadProducts = () =>
 {
-  singleProduct.textContent = '';
+  singleProductField.textContent = '';
   fetch(`https://fakestoreapi.com/products`)
     .then((res) => res.json())
-    .then((data) => showProducts(data));
+    .then((data) => showAllProducts(data));
 };
 loadProducts();
 
 // show all product in UI 
-const showProducts = (products) =>
+const showAllProducts = (products) =>
 {
-  allProducts.textContent = '';
+  allProductsField.textContent = '';
   products.forEach(items =>
   {
-    const { category, description, id, image, price, rating: { rate, count }, title } = items;
+    const { category, id, image, price, rating: { rate, count }, title } = items;
     const div = document.createElement('div');
     div.classList.add('col');
     div.innerHTML = `
@@ -39,7 +39,7 @@ const showProducts = (products) =>
     </div>
   </div>
   `;
-    allProducts.appendChild(div);
+    allProductsField.appendChild(div);
   });
 };
 
@@ -57,7 +57,7 @@ const addToCart = (price) =>
 // single product details onclick handler
 const itemDetails = (id) =>
 {
-  allProducts.textContent = '';
+  allProductsField.textContent = '';
   fetch(`https://fakestoreapi.com/products/${id}`)
     .then(res => res.json())
     .then(data => SingleProductDisplay(data));
@@ -86,7 +86,7 @@ const SingleProductDisplay = (item) =>
     </div>
   </div>
   `;
-  singleProduct.appendChild(div);
+  singleProductField.appendChild(div);
 }
 
 // get input value function
