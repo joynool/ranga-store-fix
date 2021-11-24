@@ -42,6 +42,37 @@ const showAllProducts = (products) =>
     allProductsField.appendChild(div);
   });
 };
+// Loading spinner toggle
+const setLoading = (state = false) =>
+{
+  const spinner = document.getElementById('loading-spinner');
+  if (state === true) {
+    spinner.style.display = 'block';
+  }
+  else {
+    spinner.style.display = 'none';
+  }
+}
+
+// OnClick products search implements
+const searchData = () =>
+{
+  showAllProducts([])
+  setLoading(true);
+  fetch(`https://fakestoreapi.com/products`)
+    .then((res) => res.json())
+    .then((data) => searchResults(data));
+}
+
+const searchResults = (data) =>
+{
+  const searchField = document.getElementById('search-field');
+  const searchText = searchField.value;
+  searchField.value = '';
+  const output = data.filter(dt => dt.title.toLowerCase().includes(searchText.toLowerCase()));
+  showAllProducts(output);
+  setLoading(false);
+};
 
 // update product count and my-cart price
 let count = 0;

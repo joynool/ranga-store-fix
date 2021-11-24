@@ -20,3 +20,7 @@ body {
   border-radius: 5px;
   position: fixed;
 }
+
+#loading-spinner {
+  display: none;
+}
